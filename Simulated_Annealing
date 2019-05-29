@@ -1,10 +1,12 @@
 import random
 from scipy import *
 from matplotlib.pyplot import *
+
 N = 20
 T0 = 10.0
 Tmin = 1e-2
 tau = 1e4
+
 # //////////////////// Helping Functions //////////////////////////////
 def swap(i,j):
     global Final_Tour
