@@ -1,12 +1,10 @@
 import random
 from scipy import *
 from matplotlib.pyplot import *
-
-N = 20
+CITIES_NUMBER = 20
 T0 = 10.0
 Tmin = 1e-2
 tau = 1e4
-
 # //////////////////// Helping Functions //////////////////////////////
 def swap(i,j):
     global Final_Tour
@@ -19,11 +17,11 @@ def Generate_Rand_List(n):
         L += [random.random()]
     return L
 # //////////////////////////////////////////////////////////////////////
-X = Generate_Rand_List(N)
-Y = Generate_Rand_List(N)
+X = Generate_Rand_List(CITIES_NUMBER)
+Y = Generate_Rand_List(CITIES_NUMBER)
  
-Init_Tour = arange(N)
-Final_Tour = arange(N)
+Init_Tour = arange(CITIES_NUMBER)
+Final_Tour = arange(CITIES_NUMBER)
 
 def Tour_Energy():
     global Final_Tour
@@ -53,10 +51,10 @@ def Run():
     t = 0
     T = T0
     while T > Tmin:
-        i = random.random_integers(0,N-1)
-        j = random.random_integers(0,N-1)
+        i = random.random_integers(0,CITIES_NUMBER-1)
+        j = random.random_integers(0,CITIES_NUMBER-1)
         while i == j:
-            i = random.random_integers(0,N-1)
+            i = random.random_integers(0,CITIES_NUMBER-1)
         Fluctuation(i,j)
         final_energy = Tour_Energy()   
         init_energy = Metropolis(final_energy,init_energy,T,i,j)
