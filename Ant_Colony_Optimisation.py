@@ -2,7 +2,7 @@ from math import *
 import random
 from matplotlib.pyplot import *
 
-CITIES_NUMBER = 20
+CITIES_NUMBER = 25
 COLONY_SIZE = 20
 Q = 1.0
 RHO = 0.1
@@ -20,7 +20,7 @@ def Roulette_Wheel(proba_list):
         counter = 0
         for j in range(i+1):
             counter += proba_list[j]
-        R += [counter] 
+        R += [counter]
     return R
 
 # //////////////////////////////////////////////////////////////////////
@@ -66,22 +66,20 @@ class ACO_For_TSP:
             denomunator = 0.0
             self.Unvisited_Cities()
             for unvisited_city in self.unvisited_cities:
-                denomunator += pow(self.distances_matrix[self.tour[-1]][unvisited_city], BETA) * \
+                denomunator += pow((1/self.distances_matrix[self.tour[-1]][unvisited_city]), BETA) * \
                                pow(self.pheromone_matrix[self.tour[-1]][unvisited_city], ALPHA)
             for unvisited_city in self.unvisited_cities:
-                numerator = pow(self.distances_matrix[self.tour[-1]][unvisited_city], BETA) * \
+                numerator = pow((1/self.distances_matrix[self.tour[-1]][unvisited_city]), BETA) * \
                             pow(self.pheromone_matrix[self.tour[-1]][unvisited_city], ALPHA)
                 next_element = numerator / denomunator
-                for i in range(len(proba_list)):
-                    next_element += proba_list[i]
                 proba_list += [next_element]
-            return proba_list                    
+            return proba_list
         def Choose_Next_City(self):
             return self.Roulette_Index(Roulette_Wheel(self.Creat_Proba_List()))
         def Choose_Tour(self):
             self.tour = [random.randint(0, CITIES_NUMBER - 1)]
             while len(self.tour) < CITIES_NUMBER:
-                self.tour.append(self.Choose_Next_City())
+                self.tour += [self.Choose_Next_City()]
             return self.tour
         
     def __init__(self):
@@ -120,10 +118,6 @@ class ACO_For_TSP:
             for i in range(CITIES_NUMBER):
                 for j in range(CITIES_NUMBER):
                     self.Edges_Matrix.pheromone_matrix[i][j] *= (1.0 - RHO)
-            for ant in self.ants:
-                for i in range(CITIES_NUMBER):
-                    for j in range(CITIES_NUMBER):
-                        ant.pheromone_matrix[i][j] *= (1.0 - RHO)
     def Plot(self):
         x = [CITIES[i][0] for i in self.best_tour]
         x.append(x[0])
@@ -151,3 +145,5 @@ if __name__ == '__main__':
     print("Best Distance :", aco.best_distance)
     aco.Plot()
 
+
+    
