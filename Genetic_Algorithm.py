@@ -1,12 +1,12 @@
 from numpy import *
 from random import *
 from matplotlib.pyplot import *
-
+                                                                          
 MUTATION_RATE = 0.01
-POPULATION_SIZE = 50
+POPULATION_SIZE = 20
 ELITE_SIZE = 10
-CITIES_NUMBER = 25
-GENERATIONS_NUMBER = 200
+CITIES_NUMBER = 10
+GENERATIONS_NUMBER = 10
 
 # /////////////////////// Helping functions ///////////////////////////////
 
@@ -24,7 +24,7 @@ def swap(L,i,j):
 def Generate_Rand_List(n):
     L = []
     for i in range(n):
-        L += [random()]
+        L += [random()*10]
     return L
 
 # ////////////////////////////////////////////////////////////////////////
@@ -55,14 +55,14 @@ def Tour_Length(individual):
 def Min_Length(selected_population):
     best_individual = selected_population[0]
     for i in range(len(selected_population)):
-        if(Tour_Length(best_individual) < Tour_Length(selected_population[i])):
+        if(Tour_Length(best_individual) > Tour_Length(selected_population[i])):
             best_individual = selected_population[i]
     return Tour_Length(best_individual)
 
 def Best_Individual_Index(selected_population):
     i = 0    
     for j in range(len(selected_population)):
-        if(Tour_Length(selected_population[i]) < Tour_Length(selected_population[j])):
+        if(Tour_Length(selected_population[i]) > Tour_Length(selected_population[j])):
             i = j
     return i
 
@@ -106,7 +106,7 @@ def Selection(population):
     return L[0:ELITE_SIZE]
 
 def f(d, m):
-    return 1/pow(float(d-0.99*m), 3)
+    return 1/pow((d-0.99*m), 3)
 
 def Fitness_Array(selected_population):
     L = []
@@ -121,14 +121,14 @@ def Roulette_Wheel(selected_population):
     R = []
     L = Fitness_Array(selected_population)
     # D is the global distance
-    D = 0
+    D = 0.0
     for i in range(len(L)):
         D += L[i]
     for i in range(len(L)):
         numerator = 0
         for j in range(i+1):
             numerator += L[j]
-        R += [numerator / float(D)]
+        R += [numerator / D]
     return R
 
 def Roulette_index(R):
@@ -161,6 +161,7 @@ def Next_Generation(population):
     for k in range((len(population)-ELITE_SIZE)/2):
         i = Roulette_index(Roulette_Wheel(population))
         j = Roulette_index(Roulette_Wheel(population))
+        print(Roulette_Wheel(population))
         help_list += Crossover(population[i],population[j]) 
         L += [mutation(help_list[0]),mutation(help_list[1])]
     return L
@@ -192,10 +193,13 @@ def Plot():
     subplot(1, 2, 1)
     plot(final_x,final_y,'k')
     plot(X,Y, 'ro')
-    title('Initial Tour')
+    title('Best_Tour')
     subplot(1, 2, 2)
     plot(init_x,init_y,'k')
     plot(X,Y, 'ro')
-    title('Optimal tour')
+    title('Initial_Tour')
+    print(Tour_Length(init_individual))
+    print(Tour_Length(best_individual))
     show()
 Plot()
+
